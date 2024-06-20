@@ -1,0 +1,25 @@
+# Docker Compose configuration file
+
+services:
+  # PostgreSQL service
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=app_db
+    command: ["postgres", "-c", "log_statement=all"]
+
+  # Redis service
+  redis:
+    image: redis:latest
+
+  # Application service
+  app:
+    build: .
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres/app_db
+    ports:
+      - 8000:8000  # Expose port 8000
+    volumes:
+      - ./:/app/  # Mount current directory to /app
